@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
 </head>
 <body>
-<h3 style="text-align: center">Registro de Datos</h3>
+<h3 style="text-align: center; margin-top: 50px; margin-bottom: 50px">Registro de Datos</h3>
 
 <div class="row">
     <div class="col-sm-2">
@@ -13,16 +15,45 @@
     </div>
     <div class="container">
     <div class="col-sm-8">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Nombre</span>
+        <form>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" aria-describedby="emailHelp" placeholder="Ingrese su nombre">
             </div>
-            <input type="text" class="form-control" placeholder="Ingrese su Nombre" aria-label="Nombre" aria-describedby="basic-addon1">
-        </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" class="form-control" id="apellido" placeholder="Ingrese su Apellido">
+            </div>
+            <div class="form-group">
+                <label for="correo">Correo</label>
+                <input type="email" class="form-control" id="correo" placeholder="Ingrese su correo">
+            </div>
+            <div class="form-group">
+                <label for="Pais">Pais</label>
+                <input type="text" class="form-control" id="pais" placeholder="Ingrese su Pais">
+            </div>
+
+            <div class="form-group">
+                <label for="ciudad">Ciudad</label>
+                <input type="text" class="form-control" id="ciudad" placeholder="Ingrese su ciudad">
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">Telefono</label>
+                <input type="text" class="form-control" id="telefono" placeholder="telefono">
+            </div>
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="text" class="form-control" id="fecha" placeholder="Ingrese su fecha de nacimiento">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+        </form>
+    </div>
     </div>
 </div>
-</div>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+
 </body>
 </html>
