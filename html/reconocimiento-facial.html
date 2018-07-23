@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>Reconocimiento Facial</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/estilos/camara.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
 </head>
 <body>
 <h3 style="text-align: center; margin-top: 30px">Reconocimiento Facial</h3>
@@ -12,7 +16,26 @@
         <div class="col-sm-6">
             <div class="card" style="width: 25rem;">
                 <div class="card-header">Acercate a la camara </div>
-                <video autoplay="true" id="videoElement"></video>
+                <div class="container">
+
+                    <div class="app">
+
+                        <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
+                        <video id="camera-stream"></video>
+
+                        <p id="error-message"></p>
+
+                        <div class="controls">
+                            <a href="#" id="delete-photo" title="Delete Photo" class="disabled"><i class="material-icons">delete</i></a>
+                            <a href="#" id="take-photo" title="Take Photo"><i class="material-icons">camera_alt</i></a>
+                            <a href="#" id="download-photo" download="selfie.png" title="Save Photo" class="disabled"><i class="material-icons">file_download</i></a>
+                        </div>
+                        <!-- Hidden canvas element. Used for taking snapshot of video. -->
+                        <canvas></canvas>
+
+                    </div>
+
+                </div>
                 <div class="card-body">
                     <p class="card-text">
                         Espera a que comience el reconocimiento...
@@ -21,7 +44,7 @@
                 </div>
                 <div class="card-footer bg-transparent border-black">Footer</div>
             </div>
-            <button type="button" class="btn btn-secondary">Aceptar</button>
+            <button type="button" class="btn btn-secondary" onclick="processImage()">Aceptar</button>
 
         </div>
         <div class="col-sm-6">
@@ -43,9 +66,93 @@
         </div>
     </div>
 </div>
+<script src="/js/camara.js"></script>
 
 
-<script src="/js/main.js"></script>
+
+<h1>Detect Faces:</h1>
+Enter the URL to an image that includes a face or faces, then click
+the <strong>Analyze face</strong> button.<br><br>
+
+<button onclick="processImage()">Analyze face</button><br><br>
+
+<div id="wrapper" style="width:1020px; display:table;">
+    <div id="jsonOutput" style="width:600px; display:table-cell;">
+        Response:<br><br>
+
+        <textarea id="responseTextArea" class="UIInput"
+                  style="width:580px; height:400px;"></textarea>
+    </div>
+    <div id="imageDiv" style="width:420px; display:table-cell;">
+        Source image:<br><br>
+
+        <img src="/img/persona.jpg" alt="" id="foto">
+    </div>
+</div>
+
+<script type="text/javascript">
+    function processImage() {
+        // Replace <Subscription Key> with your valid subscription key.
+        var subscriptionKey = "7ef9f1840ba84ea585557b0a0a7a8bb8";
+
+        // NOTE: You must use the same region in your REST call as you used to
+        // obtain your subscription keys. For example, if you obtained your
+        // subscription keys from westus, replace "westcentralus" in the URL
+        // below with "westus".
+        //
+        // Free trial subscription keys are generated in the westcentralus region.
+        // If you use a free trial subscription key, you shouldn't need to change
+        // this region.
+        var uriBase =
+            "https://eastus.api.cognitive.microsoft.com/face/v1.0/detect";
+
+        // Request parameters.
+        var params = {
+            "returnFaceId": "true",
+            "returnFaceLandmarks": "false",
+            "returnFaceAttributes":
+            "age,gender,headPose,smile,facialHair,glasses,emotion," +
+            "hair,makeup,occlusion,accessories,blur,exposure,noise"
+        };
+
+        // Display the image.
+        var sourceImageUrl = document.getElementById("foto").src;
+        console.log(sourceImageUrl);
+
+
+        // Perform the REST API call.
+        $.ajax({
+            url: uriBase + "?" + $.param(params),
+
+            // Request headers.
+            beforeSend: function(xhrObj){
+                xhrObj.setRequestHeader("Content-Type","application/json");
+                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+            },
+
+            type: "POST",
+
+            // Request body.
+            data: '{"url": ' + '"' + sourceImageUrl + '"}',
+        })
+
+            .done(function(data) {
+                // Show formatted JSON on webpage.
+                $("#responseTextArea").val(JSON.stringify(data, null, 2));
+            })
+
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                // Display error message.
+                var errorString = (errorThrown === "") ?
+                    "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+                errorString += (jqXHR.responseText === "") ?
+                    "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+                        jQuery.parseJSON(jqXHR.responseText).message :
+                        jQuery.parseJSON(jqXHR.responseText).error.message;
+                alert(errorString);
+            });
+    };
+</script>
 
 </body>
 </html>
